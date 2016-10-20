@@ -2,6 +2,10 @@
 FROM yhfu/archsshd-x86_64
 MAINTAINER yhfu <yhfudev@gmail.com>
 
+# MOUNT cgroup:/sys/fs/cgroup/ # Rockerfile
+# MOUNT pacman:/var/cache/pacman/pkg/ # Rockerfile
+VOLUME [ "/sys/fs/cgroup" ]
+
 # install dependants
 RUN pacman -S --noprogressbar --noconfirm --needed lsb-release file base-devel abs fakeroot pkgfile community/pkgbuild-introspection wget git mercurial subversion cvs bzip2 unzip vim cmake make; pkgfile --update
 
@@ -87,5 +91,9 @@ USER root
 RUN rm -rf /home/docker/*
 
 # start the server (goes into the background)
-CMD /usr/bin/sshd; sleep infinity
+#CMD /usr/bin/sshd; sleep infinity
+#CMD ["/usr/sbin/init"]
+ENTRYPOINT ["/lib/systemd/systemd"]
+
+# PUSH yhfu/archlidar:latest # Rockerfile
 
