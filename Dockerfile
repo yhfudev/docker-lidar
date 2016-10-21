@@ -18,6 +18,10 @@ RUN sudo pacman -S --noprogressbar --noconfirm --needed \
   yaml-cpp \
   python2-pyqt5
 
+USER docker
+# clean up
+RUN sudo rm -rf /home/docker/*
+
 RUN yaourt -Syyua --noconfirm --needed ros-build-tools ; \
     yaourt -Syyua --noconfirm --needed ros-jade-rosbuild ; \
     yaourt -Syyua --noconfirm --needed ros-jade-catkin
