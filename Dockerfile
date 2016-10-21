@@ -6,6 +6,8 @@ MAINTAINER yhfu <yhfudev@gmail.com>
 # MOUNT pacman:/var/cache/pacman/pkg/ # Rockerfile
 VOLUME [ "/sys/fs/cgroup" ]
 
+RUN pacman -Syyu --needed --noconfirm
+
 # install dependants
 RUN pacman -S --noprogressbar --noconfirm --needed lsb-release file base-devel abs fakeroot pkgfile community/pkgbuild-introspection wget git mercurial subversion cvs bzip2 unzip vim cmake make; pkgfile --update
 
@@ -38,10 +40,12 @@ RUN sudo pacman -S --noprogressbar --noconfirm --needed \
         pkg-config jshon boost libyaml \
         ninja
 
+# ATTACH # Rockerfile
+
 # updated opencv witch opencv_contrib and CUDA
 RUN yaourt -Syyua --noconfirm --needed opencv-cuda-git
 
-# dependants for ros-indigo-rviz
+# dependants for ros-jade-rviz
 RUN sudo pacman -S --noprogressbar --noconfirm --needed \
   ogre \
   assimp \
@@ -50,42 +54,49 @@ RUN sudo pacman -S --noprogressbar --noconfirm --needed \
   mesa \
   yaml-cpp
 
-# updated ros-indigo-python-qt-binding with qt5
+# updated ros-jade-python-qt-binding with qt5
+RUN git clone https://github.com/yhfudev/pacman-ros-jade-python-qt-binding.git \
+    && cd pacman-ros-jade-python-qt-binding \
+    && makepkg -Asf \
+    && pacman -U ros-jade-python-qt-binding*.pkg.tar.xz
 
 
 RUN echo \
-  ros-indigo-roslib \
-  ros-indigo-roscpp \
-  ros-indigo-tf \
-  ros-indigo-resource-retriever \
-  ros-indigo-message-filters \
-  ros-indigo-visualization-msgs \
-  ros-indigo-image-geometry \
-  ros-indigo-cmake-modules \
-  ros-indigo-geometry-msgs \
-  ros-indigo-image-transport \
-  ros-indigo-rospy \
-  ros-indigo-map-msgs \
-  ros-indigo-std-msgs \
-  ros-indigo-std-srvs \
-  ros-indigo-rosbag \
-  ros-indigo-pluginlib \
-  ros-indigo-laser-geometry \
-  ros-indigo-interactive-markers \
-  ros-indigo-urdf \
-  ros-indigo-sensor-msgs \
-  ros-indigo-nav-msgs \
-  ros-indigo-catkin \
-  ros-indigo-rosconsole \
-  ros-indigo-media-export \
+  ros-jade-roslib \
+  ros-jade-roscpp \
+  ros-jade-tf \
+  ros-jade-resource-retriever \
+  ros-jade-message-filters \
+  ros-jade-visualization-msgs \
+  ros-jade-image-geometry \
+  ros-jade-cmake-modules \
+  ros-jade-geometry-msgs \
+  ros-jade-image-transport \
+  ros-jade-rospy \
+  ros-jade-map-msgs \
+  ros-jade-std-msgs \
+  ros-jade-std-srvs \
+  ros-jade-rosbag \
+  ros-jade-pluginlib \
+  ros-jade-laser-geometry \
+  ros-jade-interactive-markers \
+  ros-jade-urdf \
+  ros-jade-sensor-msgs \
+  ros-jade-nav-msgs \
+  ros-jade-catkin \
+  ros-jade-rosconsole \
+  ros-jade-media-export \
   | xargs -n 1 yaourt -Syyua --noconfirm --needed
 
-# updated ros-indigo-rviz with qt5
-RUN yaourt -Syyua --noconfirm --needed ros-indigo-rviz
+# updated ros-jade-rviz with qt5
+#RUN yaourt -Syyua --noconfirm --needed ros-jade-rviz
+RUN git clone https://github.com/yhfudev/pacman-ros-jade-rviz.git \
+    && cd pacman-ros-jade-rviz \
+    && makepkg -Asf \
+    && pacman -U ros-jade-rviz*.pkg.tar.xz
 
 # install all:
-# yaourt -Syyua --noconfirm --needed ros-indigo-desktop-full
-
+# yaourt -Syyua --noconfirm --needed ros-jade-desktop-full
 
 USER root
 RUN rm -rf /home/docker/*
