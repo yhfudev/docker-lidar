@@ -16,6 +16,7 @@ If you want to mount the /var/cache/pacman/pkg/ to reuse the cache, try rocker (
     sed -i \
         -e "s|^[# ]*MOUNT cgroup.*$|MOUNT /sys/fs/cgroup/:/sys/fs/cgroup/|g" \
         -e "s|^[# ]*MOUNT pacman.*$|MOUNT /root/homegw/sources/pacman-pkg-x64:/var/cache/pacman/pkg/|g" \
+        -e "s|^[# ]*MOUNT source.*$|MOUNT /root/homegw/sources/:/sources/|g" \
         -e "s|^[# ]*PUSH .*$|PUSH ${MYUSER}/archlidar-${MYARCH}:latest|g" \
         -e "s|^[# ]*ATTACH .*$|ATTACH|g" \
         -e "s|^RUN pacman -Sc$|# RUN pacman -Sc|g" \
@@ -37,7 +38,7 @@ If you want to mount the /var/cache/pacman/pkg/ to reuse the cache, try rocker (
         -v /etc/ssh/ssh_host_dsa_key:/etc/ssh/ssh_host_dsa_key:ro \
         -v /etc/ssh/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key:ro \
         -v /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro \
-        -v $HOME/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro \
+        -v /root/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro \
         -v /root/homegw/sources/:/sources/:rw \
         -v /root/homegw/sources/pacman-pkg-x64:/var/cache/pacman/pkg/:rw \
         --env="DISPLAY" \
